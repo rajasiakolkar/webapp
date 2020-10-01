@@ -18,11 +18,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public HashMap<String, Object> getUserById(UUID id) {
+    public HashMap<String, Object> getUser(String username) {
         try{
 
             HashMap<String, Object> obj = new HashMap<>();
-            User user = userRepository.findById(id).get();
+            User user = userRepository.findUserByUsername(username);
 
             obj.put("id", user.getId().toString());
             obj.put("first_name", user.getFirst_name());
