@@ -50,7 +50,7 @@ Pre-requisites: Postman, IDE
     
  3. Update a User:
 	curl -X PUT \
-	  http://localhost:8080/book \
+	  http://localhost:8080/user/306a3a27-7ce4-4a6f-bf4e-006ce8ffef13 \
 	  -H 'Authorization: Basic cHBAcHAuY29tOk9uZXBsdXM2IQ==' \
 	  -H 'Content-Type: application/json' \
 	  -H 'cache-control: no-cache' \
