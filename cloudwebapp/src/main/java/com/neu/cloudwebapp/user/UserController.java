@@ -32,25 +32,11 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping(method= RequestMethod.GET,path = "/")
-    public String beginApp(){
-        LocalTime localTime= LocalTime.now();
-        return localTime.toString();
-    }
-
     @PostMapping("/user/register")
     public ResponseEntity<HashMap<String, Object>> register(@RequestBody User user){
 
         user.setAccount_created(new Date());
         user.setAccount_updated(new Date());
-
-
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
-
-        Pattern pat = Pattern.compile(emailRegex);
 
 
         user.setUsername(user.getEmail_address());
@@ -64,7 +50,7 @@ public class UserController {
         if (user.getUsername() == null)
             return new ResponseEntity(new CustomResponse(new Date(),"Username/Email must not be empty","" ),HttpStatus.BAD_REQUEST);
 
-        if(!pat.matcher(user.getUsername()).matches())
+        if(!userService.validateEmail(user.getUsername()))
             return new ResponseEntity(new CustomResponse(new Date(),"Username must be a valid email","" ),HttpStatus.BAD_REQUEST);
 
         if(!passPattern.matcher(user.getPassword()).matches())
@@ -80,50 +66,31 @@ public class UserController {
 
         userRepository.save(user);
 
-        return new ResponseEntity<>(userService.getUserById(user.getId()), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.getUser(user.getEmail_address()), HttpStatus.CREATED);
     }
 
 
 
-    @GetMapping("/user/{suuid}")
-    public ResponseEntity<HashMap<String, Object>> getUser(@PathVariable String suuid, Principal principal){
+    @GetMapping("/user/self")
+    public ResponseEntity<HashMap<String, Object>> getUser(Principal principal){
 
-        UUID uuid;
-        if(!checkUuid(suuid))
-            return new ResponseEntity(new CustomResponse(new Date(),"ID must be of type UUID","" ), HttpStatus.BAD_REQUEST);
+        User user = userRepository.findUserByUsername(principal.getName());
 
-        uuid = UUID.fromString(suuid);
-        Optional<User> user = userRepository.findById(uuid);
-
-
-        if(!principal.getName().equals(user.get().getEmail_address())) {
-            return new ResponseEntity(new CustomResponse(new Date(),"Not Authenticated","" ), HttpStatus.BAD_REQUEST);
-        }
-
-        if(!user.isPresent())
+        if(user == null)
             return new ResponseEntity(new CustomResponse(new Date(),"User not found","" ), HttpStatus.NOT_FOUND);
 
-        return  ResponseEntity.ok(userService.getUserById(uuid));
+        return  ResponseEntity.ok(userService.getUser(user.getEmail_address()));
 
     }
 
-    @PutMapping("/user/{suuid}")
-    public ResponseEntity<HashMap<String, Object>> updateUser(@RequestBody Map<Object, Object> fields, @PathVariable String suuid, Principal principal){
+    @PutMapping("/user/self")
+    public ResponseEntity<HashMap<String, Object>> updateUser(@RequestBody Map<Object, Object> fields, Principal principal){
 
-        UUID uuid;
-        if(!checkUuid(suuid))
-            return new ResponseEntity(new CustomResponse(new Date(),"ID must be of type UUID","" ),HttpStatus.BAD_REQUEST);
+        User user = userRepository.findUserByUsername(principal.getName());
 
-        uuid = UUID.fromString(suuid);
-
-        User user = userService.findById(suuid);
-
-        if(user.getId() == null)
+        if(user == null)
             return new ResponseEntity(new CustomResponse(new Date(),"User not found","" ),HttpStatus.NOT_FOUND);
 
-        if(!principal.getName().equals(user.getEmail_address())) {
-            return new ResponseEntity(new CustomResponse(new Date(),"Not Authenticated","" ), HttpStatus.BAD_REQUEST);
-        }
 
         AtomicBoolean flag = new AtomicBoolean(false);
         AtomicBoolean flagPass = new AtomicBoolean(false);
@@ -170,19 +137,8 @@ public class UserController {
         user.setAccount_updated(new Date());
         userRepository.save(user);
 
-        return new ResponseEntity<>(userService.getUserById(uuid), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUser(user.getEmail_address()), HttpStatus.OK);
 
     }
-
-    public boolean checkUuid(String uuid){
-        try{
-            UUID nuuid = UUID.fromString(uuid);
-        }
-        catch (Exception ex){
-            return false;
-        }
-        return true;
-    }
-
 
     }
