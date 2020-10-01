@@ -39,14 +39,6 @@ public class UserController {
         user.setAccount_updated(new Date());
 
 
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
-
-        Pattern pat = Pattern.compile(emailRegex);
-
-
         user.setUsername(user.getEmail_address());
 
         User findUser = userRepository.findUserByUsername(user.getUsername());
@@ -58,7 +50,7 @@ public class UserController {
         if (user.getUsername() == null)
             return new ResponseEntity(new CustomResponse(new Date(),"Username/Email must not be empty","" ),HttpStatus.BAD_REQUEST);
 
-        if(!pat.matcher(user.getUsername()).matches())
+        if(!userService.validateEmail(user.getUsername()))
             return new ResponseEntity(new CustomResponse(new Date(),"Username must be a valid email","" ),HttpStatus.BAD_REQUEST);
 
         if(!passPattern.matcher(user.getPassword()).matches())

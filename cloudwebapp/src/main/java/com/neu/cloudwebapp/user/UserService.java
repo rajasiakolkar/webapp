@@ -1,16 +1,11 @@
 package com.neu.cloudwebapp.user;
 
-import javassist.Loader;
-import org.hibernate.SessionFactory;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -49,6 +44,19 @@ public class UserService {
         UUID uuid =  UUID.fromString(suuid);
         User user = userRepository.findById(uuid).get();
         return user;
+    }
+
+    public boolean validateEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$";
+
+        Pattern pat = Pattern.compile(emailRegex);
+
+        if(pat.matcher(email).matches()) return true;
+
+        return false;
     }
 
 }
