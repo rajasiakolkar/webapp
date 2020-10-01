@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 @RestController
 public class UserController {
 
-    String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
+    String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{9,40})";
 
     Pattern passPattern = Pattern.compile(PASSWORD_PATTERN);
 
