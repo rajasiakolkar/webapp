@@ -5,18 +5,21 @@ import com.neu.cloudwebapp.user.UserRepository;
 import com.neu.cloudwebapp.user.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = CloudwebappApplication.class)
 public class UserServiceTest {
 
     @InjectMocks
