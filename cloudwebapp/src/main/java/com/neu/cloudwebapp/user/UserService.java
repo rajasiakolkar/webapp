@@ -34,18 +34,6 @@ public class UserService {
         }
     }
 
-//
-//    public void saveUser(User user) {
-//        SessionFactory sessionFactory = null;
-//        sessionFactory.getCurrentSession().saveOrUpdate(user);
-//    }
-
-    public User findById(String suuid) {
-        UUID uuid =  UUID.fromString(suuid);
-        User user = userRepository.findById(uuid).get();
-        return user;
-    }
-
     public boolean validateEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
                 "[a-zA-Z0-9_+&*-]+)*@" +
@@ -57,6 +45,16 @@ public class UserService {
         if(pat.matcher(email).matches()) return true;
 
         return false;
+    }
+
+    public boolean checkUuid(String uuid){
+        try{
+            UUID nuuid = UUID.fromString(uuid);
+        }
+        catch (Exception ex){
+            return false;
+        }
+        return true;
     }
 
 }

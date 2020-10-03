@@ -4,14 +4,12 @@ import com.neu.cloudwebapp.response.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.security.Principal;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
@@ -80,6 +78,24 @@ public class UserController {
             return new ResponseEntity(new CustomResponse(new Date(),"User not found","" ), HttpStatus.NOT_FOUND);
 
         return  ResponseEntity.ok(userService.getUser(user.getEmail_address()));
+
+    }
+
+    @GetMapping("/user/{suuid}")
+    public ResponseEntity<HashMap<String, Object>> getUserById(@PathVariable String suuid){
+
+        if(!userService.checkUuid(suuid)) {
+            return new ResponseEntity(new CustomResponse(new Date(),"ID must be of type UUID","" ),HttpStatus.BAD_REQUEST);
+        }
+
+        UUID uuid = UUID.fromString(suuid);
+
+        Optional<User> user = userRepository.findById(uuid);
+
+        if(!user.isPresent())
+            return new ResponseEntity(new CustomResponse(new Date(),"User not found","" ), HttpStatus.NOT_FOUND);
+
+        return  ResponseEntity.ok(userService.getUser(user.get().getEmail_address()));
 
     }
 
