@@ -1,5 +1,6 @@
 package com.neu.cloudwebapp.user;
 
+import com.neu.cloudwebapp.question_answer.Answer;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,7 +15,10 @@ public class User {
     @GeneratedValue(generator="UUID")
     @GenericGenerator(name="UUID", strategy="org.hibernate.id.UUIDGenerator")
     @Column(name="id", updatable = false, nullable = false)
-    private UUID id;
+    private UUID user_id;
+
+//    @OneToOne(mappedBy = "User", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+//    private Answer answer;
 
     @Column(name="Role")
     private String role="USER";
@@ -44,7 +48,7 @@ public class User {
 
 
     public User(UUID id, String first_name, String last_name, String password, String email_address, Date account_created, Date account_updated) {
-        this.id = id;
+        this.user_id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.password = password;
@@ -70,11 +74,11 @@ public class User {
     }
 
     public UUID getId() {
-        return id;
+        return user_id;
     }
 
     public void setId(UUID id) {
-        this.id = id;
+        this.user_id = id;
     }
 
     public String getFirst_name() {
