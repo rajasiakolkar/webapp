@@ -3,7 +3,6 @@ package com.neu.cloudwebapp.question_answer;
 
 import com.neu.cloudwebapp.user.User;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,7 +16,7 @@ public class Question {
     @Id
     @GeneratedValue(generator="UUID")
     @GenericGenerator(name="UUID", strategy="org.hibernate.id.UUIDGenerator")
-    @Column(name="question_id", updatable = false, nullable = false)
+    @Column(name="id", updatable = false, nullable = false)
     private UUID question_id;
 
     @Column(name="Created_Timestamp")
