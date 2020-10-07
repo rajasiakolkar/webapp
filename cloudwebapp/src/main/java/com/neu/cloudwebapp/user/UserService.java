@@ -22,7 +22,7 @@ public class UserService {
             obj.put("id", user.getId().toString());
             obj.put("first_name", user.getFirst_name());
             obj.put("last_name", user.getLast_name());
-            obj.put("email_address", user.getEmail_address());
+            obj.put("username", user.getUsername());
             obj.put("account_created", user.getAccount_created());
             obj.put("account_updated", user.getAccount_updated());
 

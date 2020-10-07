@@ -3,11 +3,10 @@ package com.neu.cloudwebapp.question_answer;
 
 import com.neu.cloudwebapp.user.User;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "Questions")
@@ -16,7 +15,7 @@ public class Question {
     @Id
     @GeneratedValue(generator="UUID")
     @GenericGenerator(name="UUID", strategy="org.hibernate.id.UUIDGenerator")
-    @Column(name="id", updatable = false, nullable = false)
+    @Column(name="question_id", updatable = false, nullable = false)
     private UUID question_id;
 
     @Column(name="Created_Timestamp")
@@ -29,15 +28,16 @@ public class Question {
     @JoinColumn(name="user_id", nullable = false)
     private User user;
 
-    @Column(name="Question_Text")
+    @Column(name="Question_Text", nullable = false)
     private String question_text;
 
-    @OneToMany(targetEntity = Category.class, mappedBy = "question")
-    @Column(name="Categories")
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "question_categories",
+    joinColumns = {@JoinColumn(name = "question_id")},
+    inverseJoinColumns = {@JoinColumn(name = "category_id")})
     private List<Category> categories;
 
-    @OneToMany(targetEntity=Answer.class, mappedBy="question")
-    @Column(name = "Answers")
+    @OneToMany(cascade = CascadeType.ALL,  mappedBy="question")
     private List<Answer> answers;
 
     public Question() { }

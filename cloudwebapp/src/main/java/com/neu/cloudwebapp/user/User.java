@@ -14,14 +14,11 @@ public class User {
     @Id
     @GeneratedValue(generator="UUID")
     @GenericGenerator(name="UUID", strategy="org.hibernate.id.UUIDGenerator")
-    @Column(name="id", updatable = false, nullable = false)
+    @Column(name="user_id", updatable = false, nullable = false)
     private UUID user_id;
 
 //    @OneToOne(mappedBy = "User", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 //    private Answer answer;
-
-    @Column(name="Role")
-    private String role="USER";
 
     @Column(name="username")
     String username;
@@ -34,9 +31,6 @@ public class User {
 
     @Column(name = "Password")
     String password;
-
-    @Column(name="Email_Address")
-    String email_address;
 
     @Column(name="Account_Created")
     Date account_created;
@@ -52,17 +46,8 @@ public class User {
         this.first_name = first_name;
         this.last_name = last_name;
         this.password = password;
-        this.email_address = email_address;
         this.account_created = account_created;
         this.account_updated = account_updated;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getUsername() {
@@ -97,14 +82,6 @@ public class User {
         this.last_name = last_name;
     }
 
-    public String getEmail_address() {
-        return email_address;
-    }
-
-    public void setEmail_address(String email_address) {
-        this.email_address = email_address;
-    }
-
     public Date getAccount_created() {
         return account_created;
     }
@@ -129,8 +106,4 @@ public class User {
         this.password = password;
     }
 
-//    @Override
-//    public String toString() {
-//        return getFirst_name() + " " + getLast_name()
-//    }
 }

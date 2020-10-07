@@ -3,6 +3,7 @@ package com.neu.cloudwebapp.question_answer;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,9 +19,8 @@ public class Category {
     @Column(name="Category")
     private String category;
 
-    @ManyToOne
-    @JoinColumn(name="question_id", nullable=false)
-    private Question question;
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.PERSIST)
+    private List<Question> questions;
 
     public Category() { }
 

@@ -37,7 +37,7 @@ public class UserController {
         user.setAccount_updated(new Date());
 
 
-        user.setUsername(user.getEmail_address());
+        user.setUsername(user.getUsername());
 
         User findUser = userRepository.findUserByUsername(user.getUsername());
 
@@ -64,7 +64,7 @@ public class UserController {
 
         userRepository.save(user);
 
-        return new ResponseEntity<>(userService.getUser(user.getEmail_address()), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.getUser(user.getUsername()), HttpStatus.CREATED);
     }
 
 
@@ -77,7 +77,7 @@ public class UserController {
         if(user == null)
             return new ResponseEntity(new CustomResponse(new Date(),"User not found","" ), HttpStatus.NOT_FOUND);
 
-        return  ResponseEntity.ok(userService.getUser(user.getEmail_address()));
+        return  ResponseEntity.ok(userService.getUser(user.getUsername()));
 
     }
 
@@ -95,7 +95,7 @@ public class UserController {
         if(!user.isPresent())
             return new ResponseEntity(new CustomResponse(new Date(),"User not found","" ), HttpStatus.NOT_FOUND);
 
-        return  ResponseEntity.ok(userService.getUser(user.get().getEmail_address()));
+        return  ResponseEntity.ok(userService.getUser(user.get().getUsername()));
 
     }
 
@@ -119,7 +119,7 @@ public class UserController {
             if (k.equals("username")
                     || k.equals("account_created")
                     || k.equals("account_updated")
-                    || k.equals("email_address")
+                    || k.equals("username")
                     || k.equals("id")) {
                 flag.set(true);
                 break;
@@ -153,7 +153,7 @@ public class UserController {
         user.setAccount_updated(new Date());
         userRepository.save(user);
 
-        return new ResponseEntity<>(userService.getUser(user.getEmail_address()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUser(user.getUsername()), HttpStatus.OK);
 
     }
 
