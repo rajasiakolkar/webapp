@@ -14,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(generator="UUID")
     @GenericGenerator(name="UUID", strategy="org.hibernate.id.UUIDGenerator")
-    @Column(name="id", updatable = false, nullable = false)
+    @Column(name="user_id", updatable = false, nullable = false)
     private UUID user_id;
 
 //    @OneToOne(mappedBy = "User", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
