@@ -1,6 +1,7 @@
 package com.neu.cloudwebapp.question_answer;
 
 
+import com.neu.cloudwebapp.File.File;
 import com.neu.cloudwebapp.user.User;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,18 @@ public class Question {
     @OneToMany(cascade = CascadeType.ALL,  mappedBy="question")
     private List<Answer> answers;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
+    private List<File> attachments;
+
     public Question() { }
+
+    public List<File> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<File> attachments) {
+        this.attachments = attachments;
+    }
 
     public User getUser() {
         return user;
@@ -65,14 +77,6 @@ public class Question {
     public void setUpdated_timestamp(Date updated_timestamp) {
         this.updated_timestamp = updated_timestamp;
     }
-
-//    public UUID getUser_id() {
-//        return user_id;
-//    }
-//
-//    public void setUser_id(UUID user_id) {
-//        this.user_id = user_id;
-//    }
 
     public String getQuestion_text() {
         return question_text;
