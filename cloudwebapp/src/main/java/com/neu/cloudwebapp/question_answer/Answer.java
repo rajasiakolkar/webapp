@@ -1,9 +1,11 @@
 package com.neu.cloudwebapp.question_answer;
 
+import com.neu.cloudwebapp.File.File;
 import com.neu.cloudwebapp.user.User;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -21,6 +23,9 @@ public class Answer {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "answer")
+    private List<File> attachments;
+
     @Column(name="Created_Timestamp")
     private Date created_timestamp;
 
@@ -35,6 +40,14 @@ public class Answer {
     private String answer_text;
 
     public Answer() { }
+
+    public List<File> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<File> attachments) {
+        this.attachments = attachments;
+    }
 
     public Question getQuestion() {
         return question;
