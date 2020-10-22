@@ -3,10 +3,7 @@ package com.neu.cloudwebapp.File;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -54,7 +51,9 @@ public class FileService {
 
 
 
-    public void saveFileS3(UUID id, MultipartFile file) throws Exception{
+    public ObjectMetadata saveFileS3(UUID id, MultipartFile file) throws Exception{
+
+        S3Object fullObject = null;
 
         try {
 
@@ -62,18 +61,24 @@ public class FileService {
 
             String fileNewName = id + "-" + file.getOriginalFilename();
 
+            ObjectMetadata objectMetadata = new ObjectMetadata();
 
-            ObjectMetadata objectMeatadata = new ObjectMetadata();
+            objectMetadata.setContentType(file.getContentType());
 
-            objectMeatadata.setContentType(file.getContentType());
 
-            s3.putObject(new PutObjectRequest(bucket_name, fileNewName, file.getInputStream(),
-                    objectMeatadata).withCannedAcl(CannedAccessControlList.Private));
+            PutObjectRequest obj = new PutObjectRequest(bucket_name, fileNewName, file.getInputStream(),
+                    objectMetadata).withCannedAcl(CannedAccessControlList.Private);
+
+            s3.putObject(obj);
+
+            fullObject = s3.getObject(new GetObjectRequest(bucket_name, obj.getKey()));
 
 
         } catch (AmazonServiceException e) {
             System.err.println(e.getErrorMessage());
         }
+
+        return fullObject.getObjectMetadata();
 
     }
 

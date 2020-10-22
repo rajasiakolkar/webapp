@@ -1,5 +1,6 @@
 package com.neu.cloudwebapp.File;
 
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.neu.cloudwebapp.question_answer.Answer;
 import com.neu.cloudwebapp.question_answer.Question;
 import org.hibernate.annotations.GenericGenerator;
@@ -35,6 +36,9 @@ public class File {
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
+    @Column(name = "metadata")
+    private ObjectMetadata metadata;
+
     public File() {}
 
     @PrePersist
@@ -48,6 +52,14 @@ public class File {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public ObjectMetadata getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(ObjectMetadata metadata) {
+        this.metadata = metadata;
     }
 
     public UUID getFile_id() {
