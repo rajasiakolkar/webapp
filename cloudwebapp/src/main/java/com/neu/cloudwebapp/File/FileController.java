@@ -59,9 +59,10 @@ public class FileController {
         files.add(f);
 
         f.setQuestion(question);
-        fileRepository.save(f);
 
-        fileService.saveFileS3(question_id, file);
+        f.setMetadata(fileService.saveFileS3(question_id, file));
+
+        fileRepository.save(f);
 
         return ResponseEntity.ok().body(fileService.getFileData(f.getFile_id()));
     }
@@ -126,9 +127,10 @@ public class FileController {
         files.add(f);
 
         f.setAnswer(answer);
-        fileRepository.save(f);
 
-        fileService.saveFileS3(answer_id, file);
+        f.setMetadata(fileService.saveFileS3(answer_id, file));
+
+        fileRepository.save(f);
 
         return ResponseEntity.ok().body(fileService.getFileData(f.getFile_id()));
     }
