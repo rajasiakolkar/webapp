@@ -31,6 +31,7 @@ jobs:
 
       - name: Builds the jar file for the webapp
         run: |
+          cd cloudwebapp
           mvn clean package
           pwd
           ls -al
