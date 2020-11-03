@@ -30,8 +30,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Builds the jar file for the webapp
-          run: |
-            mvn clean package
-            pwd
-            ls -al
-            ls -al target/
+        run: |
+          mvn clean package
+          pwd
+          ls -al
+          ls -al target/
