@@ -6,7 +6,7 @@ name: build-deploy
 # events but only for the master branch
 on:
   pull_request:
-    branches: [ a6-dev ]
+    branches: [ a6-demo ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -18,6 +18,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name : Install AWS CLI
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y python-pip
+          sudo pip install awscli
+          sudo pip install aws-sam-cli
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
