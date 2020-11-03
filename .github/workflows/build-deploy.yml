@@ -1,14 +1,9 @@
-# This is a basic workflow to help you get started with Actions
-
 name: build-deploy
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   pull_request:
     branches: [ a6-demo ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
   deploy:
@@ -21,10 +16,11 @@ jobs:
 
       - name : Install AWS CLI
         run: |
+          python --version
+          cat /etc/issue
           sudo apt-get update -y
           sudo apt-get install -y python-pip
-          sudo pip install awscli
-          sudo pip install aws-sam-cli
+          sudo pip install awscli pyrsistent==0.16.0
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
