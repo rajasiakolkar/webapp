@@ -11,18 +11,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class CloudwebappApplication extends SpringBootServletInitializer {
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+//	@Bean
+//	public PasswordEncoder passwordEncoder() {
+//		return new BCryptPasswordEncoder();
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(CloudwebappApplication.class, args);
 	}
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(CloudwebappApplication.class);
-	}
+//	@Override
+//	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//		return application.sources(CloudwebappApplication.class);
+//	}
 
 }
