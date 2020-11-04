@@ -1,13 +1,13 @@
 name: build-deploy
 
 on:
-  pull_request:
+  push:
     branches: [ a6-demo ]
 
 jobs:
 
   deploy:
-    name: Deploy
+    name: build-deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -72,3 +72,6 @@ jobs:
             --region ${{ secrets.AWS_REGION }} \
             --s3-location bucket=${{ secrets.S3_CODEDEPLOY_BUCKET }},key=csye6225-webapp-${{ github.run_number }}.zip,bundleType=zip \
             --output json
+          dId=$(echo $output | jq -r '.deploymentId')
+
+          aws deploy wait deployment-successful --deployment-id $dId
