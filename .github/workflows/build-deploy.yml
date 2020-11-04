@@ -25,14 +25,33 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_CODEDEPLOY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_CODEDEPLOY }}
+          aws-region: ${{ secrets.AWS_REGION_CODEDEPLOY }}
 
-      - name: Builds the jar file for the webapp
+      - name: Build the jar file for the webapp
         run: |
           cd cloudwebapp
           mvn clean package
           pwd
           ls -al
           ls -al target/
+      - name: Build Deployment Artifact
+        run: |
+          sudo chmod +x codedeploy/*.sh
+          mkdir codedeploy_artifact
+          cd codedeploy_artifact
+          ls -al
+          cd ..
+          pwd
+          ls -al
+          sudo cp appspec.yml codedeploy_artifact/
+          sudo cp -r codedeploy codedeploy_artifact/
+          sudo cp ./cloudwebapp/target/ROOT.jar codedeploy_artifact/
+          pwd
+          cd codedeploy_artifact
+          pwd
+          ls -al
+          cd ..
+          pwd
+          ls -al
