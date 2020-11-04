@@ -27,7 +27,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION_CODEDEPLOY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Build JAR
         run: |
@@ -58,8 +58,17 @@ jobs:
       - name: Copy to S3
         run: |
           aws deploy push \
-          --application-name csye6225-webapp \
+          --application-name ${{ secrets.CODEDEPLOY_APPLICATION_NAME }} \
           --description "This is a new revision for the application" \
           --ignore-hidden-files \
-          --s3-location s3://codedeploy.dev.rajasiakolkar.me/csye6225-webapp-${{ github.run_number }}.zip \
+          --s3-location s3://${{ secrets.S3_CODEDEPLOY_BUCKET }}/csye6225-webapp-${{ github.run_number }}.zip \
           --source ./codedeploy_artifact/
+      - name: Deploy Application To Codedeploy
+        command: |
+          aws deploy create-deployment --application-name ${{ secrets.CODEDEPLOY_APPLICATION_NAME }} \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name ${{ secrets.CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME }} \
+            --description "CSYE-6225 - CodeDeploy" \
+            --region ${{ secrets.AWS_REGION }} \
+            --s3-location bucket=${{ secrets.S3_CODEDEPLOY_BUCKET }},key=csye6225-webapp-${{ github.run_number }}.zip,bundleType=zip \
+            --output json
