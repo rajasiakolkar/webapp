@@ -25,11 +25,11 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_CODEDEPLOY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_CODEDEPLOY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION_CODEDEPLOY }}
 
-      - name: Build the jar file for the webapp
+      - name: Build JAR
         run: |
           cd cloudwebapp
           mvn clean package
@@ -55,3 +55,11 @@ jobs:
           cd ..
           pwd
           ls -al
+      - name: Copy to S3
+        run: |
+          aws deploy push \
+          --application-name csye6225-webapp \
+          --description "This is a new revision for the application" \
+          --ignore-hidden-files \
+          --s3-location s3://codedeploy.dev.rajasiakolkar.me/csye6225-webapp-${{ github.run_number }}.zip \
+          --source ./codedeploy_artifact/
