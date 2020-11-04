@@ -46,7 +46,7 @@ public class FileService {
 
     private AmazonS3 s3;
 
-    @Value("${BUCKET_NAME}")
+    @Value("${BUCKET_NAME:#{null}}")
     private String bucket_name;
 
 
