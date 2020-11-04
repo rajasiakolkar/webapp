@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source: /cloudwebapp/target/ROOT.jar
+  - source: /
     destination: /home/ubuntu/myApp
 
 hooks:
