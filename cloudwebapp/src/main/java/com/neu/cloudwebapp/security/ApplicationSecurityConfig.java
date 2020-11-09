@@ -24,11 +24,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/questions").permitAll()
+                .authorizeRequests().antMatchers("/v1/questions").permitAll()
                 .and().authorizeRequests().antMatchers("/v1/user").permitAll()
-                .and().authorizeRequests().antMatchers(HttpMethod.GET, "/question/{squestion_id}").permitAll()
-                .and().authorizeRequests().antMatchers(HttpMethod.GET, "/question/{squestion_id}/answer/{sanswer_id}").permitAll()
-                .and().authorizeRequests().antMatchers("/user/{suuid}").permitAll()
+                .and().authorizeRequests().antMatchers(HttpMethod.GET, "/v1/question/{squestion_id}").permitAll()
+                .and().authorizeRequests().antMatchers(HttpMethod.GET, "/v1/question/{squestion_id}/answer/{sanswer_id}").permitAll()
+                .and().authorizeRequests().antMatchers("/v1/user/{suuid}").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

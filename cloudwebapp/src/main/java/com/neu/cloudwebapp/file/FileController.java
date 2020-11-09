@@ -33,7 +33,7 @@ public class FileController {
     @Autowired
     private StatsDClient statsDClient;
 
-    @PostMapping("/question/{question_id}/file")
+    @PostMapping("/v1/question/{question_id}/file")
     public ResponseEntity<?> postQuestionFile(@RequestParam(required = false) MultipartFile file, Principal principal, @PathVariable UUID question_id) throws Exception {
 
         if(file == null) return ResponseEntity.badRequest().body(new CustomResponse(new Date(),"Select a file",""));
@@ -72,7 +72,7 @@ public class FileController {
         return ResponseEntity.ok().body(fileService.getFileData(f.getFile_id()));
     }
 
-    @DeleteMapping("/question/{question_id}/file/{file_id}")
+    @DeleteMapping("/v1/question/{question_id}/file/{file_id}")
     public ResponseEntity<?> deleteQuestionFile(@PathVariable UUID question_id, @PathVariable UUID file_id, Principal principal) throws Exception {
 
         Optional<Question> question = questionRepository.findById(question_id);
@@ -98,7 +98,7 @@ public class FileController {
 
     }
 
-    @PostMapping("/question/{question_id}/answer/{answer_id}/file")
+    @PostMapping("/v1/question/{question_id}/answer/{answer_id}/file")
     public ResponseEntity<?> postAnswerFile(@RequestParam(required = false) MultipartFile file, Principal principal, @PathVariable UUID question_id, @PathVariable UUID answer_id) throws Exception {
         if(file == null) return ResponseEntity.badRequest().body(new CustomResponse(new Date(),"Select a file",""));
 
@@ -140,7 +140,7 @@ public class FileController {
         return ResponseEntity.ok().body(fileService.getFileData(f.getFile_id()));
     }
 
-    @DeleteMapping("/question/{question_id}/answer/{answer_id}/file/{file_id}")
+    @DeleteMapping("/v1/question/{question_id}/answer/{answer_id}/file/{file_id}")
     public ResponseEntity<?> deleteQuestionFile(@PathVariable UUID question_id, @PathVariable UUID answer_id, @PathVariable UUID file_id, Principal principal) throws Exception {
 
         Optional<Question> question = questionRepository.findById(question_id);
