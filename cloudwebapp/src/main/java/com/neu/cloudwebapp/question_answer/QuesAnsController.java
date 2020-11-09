@@ -41,7 +41,7 @@ public class QuesAnsController {
     @Autowired
     private QuesAnsService quesAnsService;
 
-    @GetMapping("/question/{squestion_id}")
+    @GetMapping("/v1/question/{squestion_id}")
     public ResponseEntity<HashMap<String, Object>> getQuestionById(@PathVariable String squestion_id) {
 
         if(!userService.checkUuid(squestion_id)) {
@@ -58,7 +58,7 @@ public class QuesAnsController {
         return new ResponseEntity<>(quesAnsService.getQuestion(uuid, 0), HttpStatus.OK);
     }
 
-    @PostMapping("/question/")
+    @PostMapping("/v1/question/")
     public ResponseEntity<HashMap<String, Object>> postQuestion(@RequestBody Question question, Principal principal) {
 
         question.setCreated_timestamp(new Date());
@@ -103,7 +103,7 @@ public class QuesAnsController {
     }
 
 
-    @PostMapping("/question/{squestion_id}/answer")
+    @PostMapping("/v1/question/{squestion_id}/answer")
     public ResponseEntity<HashMap<String, Object>> answerQuestion(@RequestBody Answer answer, Principal principal, @PathVariable String squestion_id) {
 
         answer.setCreated_timestamp(new Date());
@@ -120,7 +120,7 @@ public class QuesAnsController {
 
     }
 
-    @GetMapping("/questions")
+    @GetMapping("/v1/questions")
     public ResponseEntity<List<Object>> getAllQuestions(){
 
         List<Question> questions = questionRepository.findAll();
@@ -129,7 +129,7 @@ public class QuesAnsController {
 
     }
 
-    @GetMapping("/question/{squestion_id}/answer/{sanswer_id}")
+    @GetMapping("/v1/question/{squestion_id}/answer/{sanswer_id}")
     public ResponseEntity<HashMap<String, Object>> getAQuestionsAnswer(@PathVariable("squestion_id") String squestion_id, @PathVariable("sanswer_id") String sanswer_id) {
 
         if(!userService.checkUuid(squestion_id)) {
@@ -171,7 +171,7 @@ public class QuesAnsController {
 
     }
 
-    @DeleteMapping("/question/{squestion_id}")
+    @DeleteMapping("/v1/question/{squestion_id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable String squestion_id, Principal principal) {
 
         UUID question_id = UUID.fromString(squestion_id);
@@ -195,7 +195,7 @@ public class QuesAnsController {
 
     }
 
-    @DeleteMapping("/question/{squestion_id}/answer/{sanswer_id}")
+    @DeleteMapping("/v1/question/{squestion_id}/answer/{sanswer_id}")
     public ResponseEntity<Void> deleteAnswer(@PathVariable("squestion_id") String squestion_id, @PathVariable("sanswer_id") String sanswer_id, Principal principal) {
 
         UUID question_id = UUID.fromString(squestion_id);
@@ -237,7 +237,7 @@ public class QuesAnsController {
 
     }
 
-    @PutMapping("/question/{squestion_id}")
+    @PutMapping("/v1/question/{squestion_id}")
     public ResponseEntity<HashMap<String, Object>> updateQuestion(@RequestBody Map<Object, Object> fields, Principal principal, @PathVariable String squestion_id) {
 
         if(!userService.checkUuid(squestion_id))
@@ -324,7 +324,7 @@ public class QuesAnsController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/question/{squestion_id}/answer/{sanswer_id}")
+    @PutMapping("/v1/question/{squestion_id}/answer/{sanswer_id}")
     public ResponseEntity updateAnswer(@RequestBody Map<Object, Object> fields, Principal principal, @PathVariable("squestion_id") String squestion_id, @PathVariable("sanswer_id") String sanswer_id) {
 
         UUID question_id = UUID.fromString(squestion_id);

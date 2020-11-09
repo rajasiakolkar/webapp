@@ -19,6 +19,7 @@ public class QuesAnsService {
     @Autowired
     AnswerRepository answerRepository;
 
+    @Autowired
     FileService fileService;
 
     public List<Object> getAllQuestions(List<Question> questions) {
