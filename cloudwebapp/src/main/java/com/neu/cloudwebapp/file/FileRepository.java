@@ -1,4 +1,4 @@
-package com.neu.cloudwebapp.File;
+package com.neu.cloudwebapp.file;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

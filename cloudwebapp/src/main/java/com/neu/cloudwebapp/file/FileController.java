@@ -1,7 +1,8 @@
-package com.neu.cloudwebapp.File;
+package com.neu.cloudwebapp.file;
 
 import com.neu.cloudwebapp.question_answer.*;
 import com.neu.cloudwebapp.response.CustomResponse;
+import com.timgroup.statsd.StatsDClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,12 @@ public class FileController {
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Autowired
+    private StatsDClient statsDClient;
+
     @PostMapping("/question/{question_id}/file")
     public ResponseEntity<?> postQuestionFile(@RequestParam(required = false) MultipartFile file, Principal principal, @PathVariable UUID question_id) throws Exception {
+
         if(file == null) return ResponseEntity.badRequest().body(new CustomResponse(new Date(),"Select a file",""));
 
         System.out.println(file.getContentType());

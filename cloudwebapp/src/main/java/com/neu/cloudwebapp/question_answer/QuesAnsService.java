@@ -1,6 +1,7 @@
 package com.neu.cloudwebapp.question_answer;
 
-import com.neu.cloudwebapp.File.File;
+import com.neu.cloudwebapp.file.File;
+import com.neu.cloudwebapp.file.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ public class QuesAnsService {
 
     @Autowired
     AnswerRepository answerRepository;
+
+    FileService fileService;
 
     public List<Object> getAllQuestions(List<Question> questions) {
 
@@ -59,8 +62,8 @@ public class QuesAnsService {
             } else {
                 List<HashMap<String, Object>> fileList = new ArrayList<>();
 
-                for (File a : question.get().getAttachments() ) {
-                    fileList.add(getAnswer(a.getFile_id()));
+                for (File f : question.get().getAttachments() ) {
+                    fileList.add(fileService.getFileData(f.getFile_id()));
                 }
 
                 obj.put("attachments", fileList);
