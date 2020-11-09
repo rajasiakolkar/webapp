@@ -1,4 +1,4 @@
-package com.neu.cloudwebapp.File;
+package com.neu.cloudwebapp.file;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.neu.cloudwebapp.question_answer.Answer;

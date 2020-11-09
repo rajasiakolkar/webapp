@@ -1,7 +1,7 @@
 package com.neu.cloudwebapp.question_answer;
 
 
-import com.neu.cloudwebapp.File.File;
+import com.neu.cloudwebapp.file.File;
 import com.neu.cloudwebapp.user.User;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
