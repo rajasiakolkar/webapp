@@ -136,7 +136,7 @@ public class UserController {
     public ResponseEntity<HashMap<String, Object>> getUserById(@PathVariable String suuid){
 
         long start = System.currentTimeMillis();
-        statsDClient.incrementCounter("endpoint.v1.user.self.id.api.get");
+        statsDClient.incrementCounter("endpoint.v1.user.id.api.get");
         LOGGER.info("Getting user data by ID");
 
         if(!userService.checkUuid(suuid)) {
