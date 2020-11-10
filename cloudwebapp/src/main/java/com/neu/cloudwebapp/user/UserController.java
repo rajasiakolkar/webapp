@@ -2,7 +2,8 @@ package com.neu.cloudwebapp.user;
 
 import com.neu.cloudwebapp.response.CustomResponse;
 import com.timgroup.statsd.StatsDClient;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import java.lang.reflect.Field;
 import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.apache.logging.log4j.Logger;
 import java.util.regex.Pattern;
 
 @RestController
@@ -35,7 +35,7 @@ public class UserController {
     @Autowired
     private StatsDClient statsDClient;
 
-    private static final Logger LOGGER = (Logger) LogManager.getLogger(UserController.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/v1/user")
     public ResponseEntity<HashMap<String, Object>> register(@RequestBody User user){
