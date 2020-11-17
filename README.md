@@ -59,7 +59,6 @@ Pre-requisites: Postman, IDE
 	    "last_name": "pqr",
 	    "password" : "Awwweqwt6#" }
 	}'
- 
 
 ## Running Tests
 Frameworks used for Testing: Mockito, JUnit
