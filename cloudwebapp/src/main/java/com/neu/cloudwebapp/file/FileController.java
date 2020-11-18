@@ -102,7 +102,7 @@ public class FileController {
         LOGGER.info("File added successfully!");
         long end = System.currentTimeMillis();
         long time = end-start;
-        statsDClient.recordExecutionTime("dbquery.post.file", (System.currentTimeMillis() - startdb));
+        statsDClient.recordExecutionTime("timer.s3.post.file", (System.currentTimeMillis() - startdb));
         statsDClient.recordExecutionTime("timer.file.http.post", time);
         return ResponseEntity.ok().body(fileService.getFileData(f.getFile_id()));
     }
@@ -140,7 +140,7 @@ public class FileController {
             LOGGER.error("File not found");
             long end = System.currentTimeMillis();
             long time = end-start;
-            statsDClient.recordExecutionTime("dbquery.delete.file", (System.currentTimeMillis() - startdb));
+            statsDClient.recordExecutionTime("timer.s3.post.file", (System.currentTimeMillis() - startdb));
             statsDClient.recordExecutionTime("timer.file.http.delete", time);
             return new ResponseEntity(new CustomResponse(new Date(),"Invalid File ID","" ), HttpStatus.BAD_REQUEST);
         }
@@ -151,7 +151,7 @@ public class FileController {
         LOGGER.info("File deleted successfully!");
         long end = System.currentTimeMillis();
         long time = end-start;
-        statsDClient.recordExecutionTime("dbquery.delete.file", (System.currentTimeMillis() - startdb));
+        statsDClient.recordExecutionTime("timer.s3.post.file", (System.currentTimeMillis() - startdb));
         statsDClient.recordExecutionTime("timer.file.http.delete", time);
         return ResponseEntity.noContent().build();
 
@@ -233,7 +233,7 @@ public class FileController {
         LOGGER.info("File added successfully!");
         long end = System.currentTimeMillis();
         long time = end-start;
-        statsDClient.recordExecutionTime("dbquery.post.file", (System.currentTimeMillis() - startdb));
+        statsDClient.recordExecutionTime("timer.s3.post.file", (System.currentTimeMillis() - startdb));
         statsDClient.recordExecutionTime("timer.file.http.post", time);
         return ResponseEntity.ok().body(fileService.getFileData(f.getFile_id()));
     }
@@ -294,7 +294,7 @@ public class FileController {
         LOGGER.info("File deleted successfully!");
         long end = System.currentTimeMillis();
         long time = end-start;
-        statsDClient.recordExecutionTime("dbquery.delete.file", (System.currentTimeMillis() - startdb));
+        statsDClient.recordExecutionTime("timer.s3.post.file", (System.currentTimeMillis() - startdb));
         statsDClient.recordExecutionTime("timer.file.http.delete", time);
         return ResponseEntity.noContent().build();
 
