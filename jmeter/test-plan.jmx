@@ -33,24 +33,13 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-	&quot;question_text&quot; : &quot;hi?&quot;,&#xd;
-	&quot;categories&quot; : [&#xd;
-		{&#xd;
-			&quot;category&quot; : &quot;java&quot;&#xd;
-		},&#xd;
-		{&#xd;
-			&quot;category&quot; : &quot;new&quot;&#xd;
-		},&#xd;
-		{&#xd;
-			&quot;category&quot; : &quot;OOP&quot;&#xd;
-		},&#xd;
-		{&#xd;
-			&quot;category&quot; : &quot;question&quot;&#xd;
-		}&#xd;
-		&#xd;
-	]&#xd;
-}&#xd;
-</stringProp>
+    &quot;question_text&quot; : &quot;really?&quot;,&#xd;
+    &quot;categories&quot; : [&#xd;
+        {&#xd;
+            &quot;category&quot; : &quot;cat&quot;&#xd;
+        }&#xd;
+    ]&#xd;
+}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
