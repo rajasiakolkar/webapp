@@ -54,8 +54,8 @@ public class QuesAnsController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(QuesAnsController.class);
 
+    @Autowired
     private AmazonSNS amazonSNS;
-
 
     @Value("${webapp.domain:#{null}}")
     private String webappDomain;
@@ -190,8 +190,11 @@ public class QuesAnsController {
         jsonObject.put("from", "noreply@" + webappDomain);
         jsonObject.put("to", toEmail);
         jsonObject.put("QuestionID", squestion_id);
-        jsonObject.put("message", "Your question " + squestion_id + " was just answered!");
-        jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer");
+        jsonObject.put("AnswerID", answer.getAnswer_id().toString());
+        jsonObject.put("message", "Your question " + squestion_id + " has a new answer!");
+        jsonObject.put("answerText", answer.getAnswer_text());
+        jsonObject.put("userID", principal.getName());
+        jsonObject.put("URL", "http://api." + webappDomain + "/v1/question/" + squestion_id + "/answer/" + answer.getAnswer_id().toString());
 
         LOGGER.info("JSON string created: " + jsonObject.toString());
         LOGGER.info("Publishing the message to SNS...");
@@ -424,7 +427,9 @@ public class QuesAnsController {
                 jsonObject.put("QuestionID", squestion_id);
                 jsonObject.put("AnswerID", sanswer_id);
                 jsonObject.put("message", "Answer " + sanswer_id + " deleted for your question " + squestion_id +"!");
-                jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
+                jsonObject.put("answerText", answer.get().getAnswer_text() + "deleted");
+                jsonObject.put("userID", principal.getName());
+                jsonObject.put("URL", "http://api." + webappDomain + "/v1/question/" + squestion_id);
 
                 LOGGER.info("JSON string created: " + jsonObject.toString());
                 LOGGER.info("Publishing the message to SNS...");
@@ -432,6 +437,7 @@ public class QuesAnsController {
                 PublishResult publishResult = amazonSNS.publish(new PublishRequest(snsTopicArn, jsonObject.toString()));
 
                 LOGGER.info("SNS message published: " + publishResult.toString());
+
                 answerRepository.deleteById(answer_id);
                 LOGGER.info("Answer deleted successfully");
                 long end = System.currentTimeMillis();
@@ -663,12 +669,14 @@ public class QuesAnsController {
 
                 String toEmail = question.getUser().getUsername();
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("from", "noreply@"+webappDomain);
+                jsonObject.put("from", "noreply@" + webappDomain);
                 jsonObject.put("to", toEmail);
                 jsonObject.put("QuestionID", squestion_id);
                 jsonObject.put("AnswerID", sanswer_id);
                 jsonObject.put("message", "Answer " + sanswer_id + " updated for your question " + squestion_id +"!");
-                jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
+                jsonObject.put("answerText", answer.getAnswer_text());
+                jsonObject.put("userID", principal.getName());
+                jsonObject.put("URL", "http://api." + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
 
                 LOGGER.info("JSON string created: " + jsonObject.toString());
                 LOGGER.info("Publishing the message to SNS...");
