@@ -427,7 +427,7 @@ public class QuesAnsController {
                 jsonObject.put("QuestionID", squestion_id);
                 jsonObject.put("AnswerID", sanswer_id);
                 jsonObject.put("message", "Answer " + sanswer_id + " deleted for your question " + squestion_id +"!");
-                jsonObject.put("answerText", answer.get().getAnswer_text());
+                jsonObject.put("answerText", "");
                 jsonObject.put("userID", principal.getName());
                 jsonObject.put("URL", "http://api." + webappDomain + "/v1/question/" + squestion_id);
 
