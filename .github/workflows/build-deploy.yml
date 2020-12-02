@@ -2,7 +2,7 @@ name: build-deploy
 
 on:
   push:
-    branches: [ a9-demo ]
+    branches: [ master ]
 
 jobs:
 
