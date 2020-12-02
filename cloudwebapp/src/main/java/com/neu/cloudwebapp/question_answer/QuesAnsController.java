@@ -54,8 +54,8 @@ public class QuesAnsController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(QuesAnsController.class);
 
+    @Autowired
     private AmazonSNS amazonSNS;
-
 
     @Value("${webapp.domain:#{null}}")
     private String webappDomain;
