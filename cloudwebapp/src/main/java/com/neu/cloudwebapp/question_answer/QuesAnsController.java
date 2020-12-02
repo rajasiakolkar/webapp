@@ -1,5 +1,8 @@
 package com.neu.cloudwebapp.question_answer;
 
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sns.model.PublishResult;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neu.cloudwebapp.response.CustomResponse;
@@ -7,9 +10,12 @@ import com.neu.cloudwebapp.user.User;
 import com.neu.cloudwebapp.user.UserRepository;
 import com.neu.cloudwebapp.user.UserService;
 import com.timgroup.statsd.StatsDClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
@@ -47,6 +53,13 @@ public class QuesAnsController {
     private StatsDClient statsDClient;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(QuesAnsController.class);
+
+    @Autowired
+    private AmazonSNS amazonSNS;
+    @Value("${webapp.domain}")
+    private String webappDomain;
+    @Value("${sns.topic.arn}")
+    private String snsTopicArn;
 
     @GetMapping("/v1/question/{squestion_id}")
     public ResponseEntity<HashMap<String, Object>> getQuestionById(@PathVariable String squestion_id) {
@@ -152,7 +165,7 @@ public class QuesAnsController {
 
 
     @PostMapping("/v1/question/{squestion_id}/answer")
-    public ResponseEntity<HashMap<String, Object>> answerQuestion(@RequestBody Answer answer, Principal principal, @PathVariable String squestion_id) {
+    public ResponseEntity<HashMap<String, Object>> answerQuestion(@RequestBody Answer answer, Principal principal, @PathVariable String squestion_id) throws JSONException {
 
         long start = System.currentTimeMillis();
         statsDClient.incrementCounter("endpoint.v1.question.question_id.answer.api.post");
@@ -160,6 +173,18 @@ public class QuesAnsController {
 
         answer.setCreated_timestamp(new Date());
         answer.setUpdated_timestamp(new Date());
+
+        Question question = questionRepository.findById(UUID.fromString(squestion_id)).get();
+        String toEmail = question.getUser().getUsername();
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("from", "noreply@" + webappDomain);
+        jsonObject.put("to", toEmail);
+        jsonObject.put("QuestionID", squestion_id);
+        jsonObject.put("message", "Your question " + squestion_id + " was just answered!");
+        jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer");
+
+
 
         long startdb = System.currentTimeMillis();
         User user = userRepository.findUserByUsername(principal.getName());
@@ -170,6 +195,14 @@ public class QuesAnsController {
         answerRepository.save(answer);
 
         LOGGER.info("Answer added successfully!");
+
+        LOGGER.info("JSON string created: " + jsonObject.toString());
+        LOGGER.info("Publishing the message to SNS...");
+
+        PublishResult publishResult = amazonSNS.publish(new PublishRequest(snsTopicArn, jsonObject.toString()));
+
+        LOGGER.info("SNS message published: " + publishResult.toString());
+
         long end = System.currentTimeMillis();
         long time = end-start;
         statsDClient.recordExecutionTime("dbquery.post.answer", (System.currentTimeMillis() - startdb));
@@ -331,7 +364,7 @@ public class QuesAnsController {
     }
 
     @DeleteMapping("/v1/question/{squestion_id}/answer/{sanswer_id}")
-    public ResponseEntity<Void> deleteAnswer(@PathVariable("squestion_id") String squestion_id, @PathVariable("sanswer_id") String sanswer_id, Principal principal) {
+    public ResponseEntity<Void> deleteAnswer(@PathVariable("squestion_id") String squestion_id, @PathVariable("sanswer_id") String sanswer_id, Principal principal) throws JSONException {
 
         long start = System.currentTimeMillis();
         statsDClient.incrementCounter("endpoint.v1.question.question_id.answer.answer_id.api.delete");
@@ -387,6 +420,22 @@ public class QuesAnsController {
             Object value = entry.getValue();
 
             if(key.equals("question_id") && value.equals(question.get().getQuestion_id())) {
+
+                String toEmail = question.get().getUser().getUsername();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("from", "noreply@"+webappDomain);
+                jsonObject.put("to", toEmail);
+                jsonObject.put("QuestionID", squestion_id);
+                jsonObject.put("AnswerID", sanswer_id);
+                jsonObject.put("message", "Answer " + sanswer_id + " deleted for your question " + squestion_id +"!");
+                jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
+
+                LOGGER.info("JSON string created: " + jsonObject.toString());
+                LOGGER.info("Publishing the message to SNS...");
+
+                PublishResult publishResult = amazonSNS.publish(new PublishRequest(snsTopicArn, jsonObject.toString()));
+
+                LOGGER.info("SNS message published: " + publishResult.toString());
                 answerRepository.deleteById(answer_id);
                 LOGGER.info("Answer deleted successfully");
                 long end = System.currentTimeMillis();
@@ -526,7 +575,7 @@ public class QuesAnsController {
     }
 
     @PutMapping("/v1/question/{squestion_id}/answer/{sanswer_id}")
-    public ResponseEntity updateAnswer(@RequestBody Map<Object, Object> fields, Principal principal, @PathVariable("squestion_id") String squestion_id, @PathVariable("sanswer_id") String sanswer_id) {
+    public ResponseEntity updateAnswer(@RequestBody Map<Object, Object> fields, Principal principal, @PathVariable("squestion_id") String squestion_id, @PathVariable("sanswer_id") String sanswer_id) throws JSONException {
 
         long start = System.currentTimeMillis();
         statsDClient.incrementCounter("endpoint.v1.question.question_id.answer.answer_id.api.post");
@@ -615,6 +664,23 @@ public class QuesAnsController {
 
                 answer.setUpdated_timestamp(new Date());
                 answerRepository.save(answer);
+
+                String toEmail = question.getUser().getUsername();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("from", "noreply@"+webappDomain);
+                jsonObject.put("to", toEmail);
+                jsonObject.put("QuestionID", squestion_id);
+                jsonObject.put("AnswerID", sanswer_id);
+                jsonObject.put("message", "Answer " + sanswer_id + " updated for your question " + squestion_id +"!");
+                jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
+
+                LOGGER.info("JSON string created: " + jsonObject.toString());
+                LOGGER.info("Publishing the message to SNS...");
+
+                PublishResult publishResult = amazonSNS.publish(new PublishRequest(snsTopicArn, jsonObject.toString()));
+
+                LOGGER.info("SNS message published: " + publishResult.toString());
+
 
                 LOGGER.info("Answer updated successfully");
                 long end = System.currentTimeMillis();

@@ -21,6 +21,8 @@ public class FileService {
 //            .withRegion(Regions.US_EAST_1)
 //            .build();
 
+    private AmazonS3 s3;
+
     @Autowired
     private FileRepository fileRepository;
 
@@ -43,13 +45,8 @@ public class FileService {
         }
     }
 
-
-    private AmazonS3 s3;
-
     @Value("${BUCKET_NAME:#{null}}")
     private String bucket_name;
-
-
 
     public ObjectMetadata saveFileS3(UUID id, MultipartFile file) throws Exception{
 
