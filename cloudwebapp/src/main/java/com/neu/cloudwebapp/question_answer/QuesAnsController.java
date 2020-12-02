@@ -54,11 +54,12 @@ public class QuesAnsController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(QuesAnsController.class);
 
-    @Autowired
     private AmazonSNS amazonSNS;
-    @Value("${webapp.domain}")
+
+
+    @Value("${webapp.domain:#{null}}")
     private String webappDomain;
-    @Value("${sns.topic.arn}")
+    @Value("${sns.topic.arn:#{null}}")
     private String snsTopicArn;
 
     @GetMapping("/v1/question/{squestion_id}")
