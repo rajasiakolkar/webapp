@@ -190,8 +190,9 @@ public class QuesAnsController {
         jsonObject.put("from", "noreply@" + webappDomain);
         jsonObject.put("to", toEmail);
         jsonObject.put("QuestionID", squestion_id);
-        jsonObject.put("message", "Your question " + squestion_id + " was just answered!");
-        jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id + "/answer");
+        jsonObject.put("AnswerID", answer.getAnswer_id());
+        jsonObject.put("message", "Your question " + squestion_id + " has a new answer!");
+        jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + answer.getAnswer_id());
 
         LOGGER.info("JSON string created: " + jsonObject.toString());
         LOGGER.info("Publishing the message to SNS...");
@@ -424,7 +425,7 @@ public class QuesAnsController {
                 jsonObject.put("QuestionID", squestion_id);
                 jsonObject.put("AnswerID", sanswer_id);
                 jsonObject.put("message", "Answer " + sanswer_id + " deleted for your question " + squestion_id +"!");
-                jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
+                jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id);
 
                 LOGGER.info("JSON string created: " + jsonObject.toString());
                 LOGGER.info("Publishing the message to SNS...");
@@ -664,7 +665,7 @@ public class QuesAnsController {
 
                 String toEmail = question.getUser().getUsername();
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("from", "noreply@"+webappDomain);
+                jsonObject.put("from", "noreply@" + webappDomain);
                 jsonObject.put("to", toEmail);
                 jsonObject.put("QuestionID", squestion_id);
                 jsonObject.put("AnswerID", sanswer_id);
