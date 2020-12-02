@@ -191,7 +191,7 @@ public class QuesAnsController {
         jsonObject.put("to", toEmail);
         jsonObject.put("QuestionID", squestion_id);
         jsonObject.put("message", "Your question " + squestion_id + " was just answered!");
-        jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer");
+        jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id + "/answer");
 
         LOGGER.info("JSON string created: " + jsonObject.toString());
         LOGGER.info("Publishing the message to SNS...");
@@ -424,7 +424,7 @@ public class QuesAnsController {
                 jsonObject.put("QuestionID", squestion_id);
                 jsonObject.put("AnswerID", sanswer_id);
                 jsonObject.put("message", "Answer " + sanswer_id + " deleted for your question " + squestion_id +"!");
-                jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
+                jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
 
                 LOGGER.info("JSON string created: " + jsonObject.toString());
                 LOGGER.info("Publishing the message to SNS...");
@@ -432,6 +432,7 @@ public class QuesAnsController {
                 PublishResult publishResult = amazonSNS.publish(new PublishRequest(snsTopicArn, jsonObject.toString()));
 
                 LOGGER.info("SNS message published: " + publishResult.toString());
+
                 answerRepository.deleteById(answer_id);
                 LOGGER.info("Answer deleted successfully");
                 long end = System.currentTimeMillis();
@@ -668,7 +669,7 @@ public class QuesAnsController {
                 jsonObject.put("QuestionID", squestion_id);
                 jsonObject.put("AnswerID", sanswer_id);
                 jsonObject.put("message", "Answer " + sanswer_id + " updated for your question " + squestion_id +"!");
-                jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
+                jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
 
                 LOGGER.info("JSON string created: " + jsonObject.toString());
                 LOGGER.info("Publishing the message to SNS...");
