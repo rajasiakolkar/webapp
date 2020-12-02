@@ -190,9 +190,9 @@ public class QuesAnsController {
         jsonObject.put("from", "noreply@" + webappDomain);
         jsonObject.put("to", toEmail);
         jsonObject.put("QuestionID", squestion_id);
-        jsonObject.put("AnswerID", answer.getAnswer_id());
+        jsonObject.put("AnswerID", answer.getAnswer_id().toString());
         jsonObject.put("message", "Your question " + squestion_id + " has a new answer!");
-        jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + answer.getAnswer_id());
+        jsonObject.put("URL", "http://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + answer.getAnswer_id().toString());
 
         LOGGER.info("JSON string created: " + jsonObject.toString());
         LOGGER.info("Publishing the message to SNS...");
