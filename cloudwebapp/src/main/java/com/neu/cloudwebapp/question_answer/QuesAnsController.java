@@ -164,7 +164,6 @@ public class QuesAnsController {
         return new ResponseEntity<>(quesAnsService.getQuestion(question.getQuestion_id(), 1), HttpStatus.CREATED);
     }
 
-
     @PostMapping("/v1/question/{squestion_id}/answer")
     public ResponseEntity<HashMap<String, Object>> answerQuestion(@RequestBody Answer answer, Principal principal, @PathVariable String squestion_id) throws JSONException {
 
@@ -175,18 +174,6 @@ public class QuesAnsController {
         answer.setCreated_timestamp(new Date());
         answer.setUpdated_timestamp(new Date());
 
-        Question question = questionRepository.findById(UUID.fromString(squestion_id)).get();
-        String toEmail = question.getUser().getUsername();
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("from", "noreply@" + webappDomain);
-        jsonObject.put("to", toEmail);
-        jsonObject.put("QuestionID", squestion_id);
-        jsonObject.put("message", "Your question " + squestion_id + " was just answered!");
-        jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer");
-
-
-
         long startdb = System.currentTimeMillis();
         User user = userRepository.findUserByUsername(principal.getName());
 
@@ -196,6 +183,15 @@ public class QuesAnsController {
         answerRepository.save(answer);
 
         LOGGER.info("Answer added successfully!");
+
+        Question question = questionRepository.findById(UUID.fromString(squestion_id)).get();
+        String toEmail = question.getUser().getUsername();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("from", "noreply@" + webappDomain);
+        jsonObject.put("to", toEmail);
+        jsonObject.put("QuestionID", squestion_id);
+        jsonObject.put("message", "Your question " + squestion_id + " was just answered!");
+        jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer");
 
         LOGGER.info("JSON string created: " + jsonObject.toString());
         LOGGER.info("Publishing the message to SNS...");
@@ -209,7 +205,6 @@ public class QuesAnsController {
         statsDClient.recordExecutionTime("dbquery.post.answer", (System.currentTimeMillis() - startdb));
         statsDClient.recordExecutionTime("timer.answer.http.post", time);
         return new ResponseEntity<>(quesAnsService.getAnswer(answer.getAnswer_id()), HttpStatus.CREATED);
-
     }
 
     @GetMapping("/v1/questions")
