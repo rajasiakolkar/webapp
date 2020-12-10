@@ -2,8 +2,9 @@ name: build-deploy
 
 on:
   push:
-    branches: [ a10-demo ]
+    branches: [ main ]
 
+  workflow_dispatch:
 jobs:
 
   deploy:
