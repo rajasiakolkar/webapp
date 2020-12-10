@@ -194,7 +194,7 @@ public class QuesAnsController {
         jsonObject.put("message", "Your question " + squestion_id + " has a new answer!");
         jsonObject.put("answerText", answer.getAnswer_text());
         jsonObject.put("userID", principal.getName());
-        jsonObject.put("URL", "http://api." + webappDomain + "/v1/question/" + squestion_id + "/answer/" + answer.getAnswer_id().toString());
+        jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + answer.getAnswer_id().toString());
 
         LOGGER.info("JSON string created: " + jsonObject.toString());
         LOGGER.info("Publishing the message to SNS...");
@@ -429,7 +429,7 @@ public class QuesAnsController {
                 jsonObject.put("message", "Answer " + sanswer_id + " deleted for your question " + squestion_id +"!");
                 jsonObject.put("answerText", answer.get().getAnswer_text() + "deleted");
                 jsonObject.put("userID", principal.getName());
-                jsonObject.put("URL", "http://api." + webappDomain + "/v1/question/" + squestion_id);
+                jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id);
 
                 LOGGER.info("JSON string created: " + jsonObject.toString());
                 LOGGER.info("Publishing the message to SNS...");
@@ -676,7 +676,7 @@ public class QuesAnsController {
                 jsonObject.put("message", "Answer " + sanswer_id + " updated for your question " + squestion_id +"!");
                 jsonObject.put("answerText", answer.getAnswer_text());
                 jsonObject.put("userID", principal.getName());
-                jsonObject.put("URL", "http://api." + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
+                jsonObject.put("URL", "https://" + webappDomain + "/v1/question/" + squestion_id + "/answer/" + sanswer_id);
 
                 LOGGER.info("JSON string created: " + jsonObject.toString());
                 LOGGER.info("Publishing the message to SNS...");
