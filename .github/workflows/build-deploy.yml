@@ -2,8 +2,9 @@ name: build-deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
+  workflow_dispatch:
 jobs:
 
   deploy:
